@@ -244,10 +244,10 @@ void solver::VelocityVerlet(int dimension, int integrationPoints, double final_t
 
 
             // Update position so that the center of mass is always in the origin
-            vec centerOfMassVector = centerOfMass(dimension);
-            current.position[0] -= centerOfMassVector[0];
-            current.position[1] -= centerOfMassVector[1];
-            current.position[2] -= centerOfMassVector[2];
+//            vec centerOfMassVector = centerOfMass(dimension);
+//            current.position[0] -= centerOfMassVector[0];
+//            current.position[1] -= centerOfMassVector[1];
+//            current.position[2] -= centerOfMassVector[2];
 
 
             // Loop over all other planets
@@ -450,9 +450,9 @@ void solver::GravitationalForce(planet &current,planet &other,double &Fx,double 
         double r = current.distance(other);
 
         // Calculate the forces in each direction
-        Fx -= this->G*current.mass*other.mass*relative_distance[0]/(pow(r, 2.5));
-        Fy -= this->G*current.mass*other.mass*relative_distance[1]/(pow(r, 2.5));
-        Fz -= this->G*current.mass*other.mass*relative_distance[2]/(pow(r, 2.5));
+        Fx -= this->G*current.mass*other.mass*relative_distance[0]/(r*r*r);
+        Fy -= this->G*current.mass*other.mass*relative_distance[1]/(r*r*r);
+        Fz -= this->G*current.mass*other.mass*relative_distance[2]/(r*r*r);
 }
 
 void solver::GravitationalForceRelativistic(planet &current,planet &other,double &Fx,double &Fy,double &Fz)
