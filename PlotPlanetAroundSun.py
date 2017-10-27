@@ -13,9 +13,9 @@ numberOfPlanets = int(file.readline())
 
 print numberOfPlanets
 
-X = np.zeros(((numberOfIterations)/100-1, numberOfPlanets))
-Y = np.zeros(((numberOfIterations)/100-1, numberOfPlanets))
-Z = np.zeros(((numberOfIterations)/100-1, numberOfPlanets))
+X = np.zeros(((numberOfIterations)/100, numberOfPlanets))
+Y = np.zeros(((numberOfIterations)/100, numberOfPlanets))
+Z = np.zeros(((numberOfIterations)/100, numberOfPlanets))
 """
 X = np.zeros((numberOfIterations+1, numberOfPlanets))
 Y = np.zeros((numberOfIterations+1, numberOfPlanets))
@@ -44,21 +44,21 @@ for line in file:
 #	X[:,i] -= X[:,0]
 #	Y[:,i] -= Y[:,0] 
 
-print X[:,0], Y[:,0]
+#print X[:,0], Y[:,0]
 
 fig, ax = plt.subplots()
 
 
 plt.plot(X[:,0], Y[:,0], 'o', color='gold')
-plt.plot(X[:,6], Y[:,6], 'grey')
-plt.plot(X[:,4], Y[:,4], 'brown')
-plt.plot(X[:-1,1], Y[:-1,1], 'g')
-plt.plot(X[:,3], Y[:,3], 'firebrick')
-plt.plot(X[:,2], Y[:,2], 'gold')
-plt.plot(X[:,5], Y[:,5])
-plt.plot(X[:,7], Y[:,7], 'coral')
-plt.plot(X[:,8], Y[:,8], 'dodgerblue')
-plt.plot(X[:,9], Y[:,9], 'chocolate')
+#plt.plot(X[:,6], Y[:,6], 'grey')
+#plt.plot(X[:,4], Y[:,4], 'brown')
+plt.plot(X[:,1], Y[:,1], 'g')
+#plt.plot(X[:,3], Y[:,3], 'firebrick')
+#plt.plot(X[:,2], Y[:,2], 'gold')
+#plt.plot(X[:,5], Y[:,5])
+#plt.plot(X[:,7], Y[:,7], 'coral')
+#plt.plot(X[:,8], Y[:,8], 'dodgerblue')
+#plt.plot(X[:,9], Y[:,9], 'chocolate')
 
 #plt.plot(X[:,0],t)
 

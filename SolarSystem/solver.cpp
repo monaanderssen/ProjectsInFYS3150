@@ -327,7 +327,7 @@ void solver::VelocityVerletMercury(int dimension, int integrationPoints, double 
 
     // Set up arrays
     vec acceleration(3);
-    vec acceleration_new(3);
+//    vec acceleration_new(3);
 
     // Initialize forces
     double Fx,Fy,Fz,Fxnew,Fynew,Fznew; // Forces in each dimension
@@ -450,9 +450,9 @@ void solver::GravitationalForce(planet &current,planet &other,double &Fx,double 
         double r = current.distance(other);
 
         // Calculate the forces in each direction
-        Fx -= this->G*current.mass*other.mass*relative_distance[0]/(r*r*r);
-        Fy -= this->G*current.mass*other.mass*relative_distance[1]/(r*r*r);
-        Fz -= this->G*current.mass*other.mass*relative_distance[2]/(r*r*r);
+        Fx -= this->G*current.mass*other.mass*relative_distance[0]/(pow(r, 2.5));
+        Fy -= this->G*current.mass*other.mass*relative_distance[1]/(pow(r, 2.5));
+        Fz -= this->G*current.mass*other.mass*relative_distance[2]/(pow(r, 2.5));
 }
 
 void solver::GravitationalForceRelativistic(planet &current,planet &other,double &Fx,double &Fy,double &Fz)
@@ -502,16 +502,16 @@ void solver::PotentialEnergySystem(double epsilon)
 }
 
 void::solver::writeInformationToFile(string type, int integrationPoints, int dim){
-    string planetPositionPath= string("/uio/hume/student-u69/pederbh/FYS4150/Project3/PlanetPosition") + type + "Results.txt";
+    string planetPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetPosition") + type + "Results.txt";
     ofstream myPlanetPositionFile;
     myPlanetPositionFile.open(planetPositionPath,std::ios::app);
 
-    string planetEnergiesPath= string("/uio/hume/student-u69/pederbh/FYS4150/Project3/PlanetEnergies") + type + "Results.txt";
+    string planetEnergiesPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetEnergies") + type + "Results.txt";
     ofstream myPlanetEnergiesFile(planetEnergiesPath);
 
-    string mercuryPositionPath= string("/uio/hume/student-u69/pederbh/FYS4150/Project3/MercuryPositionResults.txt");
-    ofstream myMercuryPositionFile;
-    myMercuryPositionFile.open(mercuryPositionPath,std::ios::app);
+//    string mercuryPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/MercuryPositionResults.txt");
+//    ofstream myMercuryPositionFile;
+//    myMercuryPositionFile.open(mercuryPositionPath,std::ios::app);
 
     myPlanetPositionFile << integrationPoints << endl;
     myPlanetPositionFile << dim << endl;
@@ -521,21 +521,21 @@ void::solver::writeInformationToFile(string type, int integrationPoints, int dim
     myPlanetEnergiesFile << dim << endl;
     myPlanetEnergiesFile << total_planets << endl;
 
-    myMercuryPositionFile << integrationPoints << endl;
-    myMercuryPositionFile << dim << endl;
+//    myMercuryPositionFile << integrationPoints << endl;
+//    myMercuryPositionFile << dim << endl;
 
 
     myPlanetPositionFile.close();
     myPlanetEnergiesFile.close();
-    myMercuryPositionFile.close();
+//    myMercuryPositionFile.close();
 }
 
 void solver::writeToFile(string type, planet& current, double time, int integrationPoints, double kineticEnergy, double potentialEnergy, double angularMomentum) {
-    string planetPositionPath= string("/uio/hume/student-u69/pederbh/FYS4150/Project3/PlanetPosition") + type + "Results.txt";
+    string planetPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetPosition") + type + "Results.txt";
     ofstream myPlanetPositionFile;
     myPlanetPositionFile.open(planetPositionPath,std::ios::app);
 
-    string planetEnergiesPath= string("/uio/hume/student-u69/pederbh/FYS4150/Project3/PlanetEnergies") + type + "Results.txt";
+    string planetEnergiesPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetEnergies") + type + "Results.txt";
     ofstream myPlanetEnergiesFile;
     myPlanetEnergiesFile.open(planetEnergiesPath,std::ios::app);
 
@@ -548,7 +548,7 @@ void solver::writeToFile(string type, planet& current, double time, int integrat
 
 void solver::writeMercuryToFile(double mercuryDistance, planet &Sun, planet &Mercury, double time, int integrationPoints) {
 
-    string mercuryPositionPath= string("/uio/hume/student-u69/pederbh/FYS4150/Project3/MercuryPositionResults.txt");
+    string mercuryPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/MercuryPositionResults.txt");
 
     if (! myMercuryPositionFile.is_open()) {
         myMercuryPositionFile.open(mercuryPositionPath);
