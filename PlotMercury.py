@@ -49,24 +49,19 @@ theta = np.zeros(len(r_min))
 for i in range(len(r_min)): 
     theta[i] = np.arctan(y_min_M[i]/x_min_M[i])
 
-#plt.plot(t_r_min, theta)
-#plt.title('Perihelion angle theta$_p$', fontsize = 22)
-#plt.xlabel('Time [s]', fontsize = 22)
-#plt.axis([-1.5, 1.5, -1.5, 1.5])
-#plt.axis('equal')
-#plt.ylabel('Theta$_p$ [rad]', fontsize = 22)# change to v_tilde(x)
-#pylab.xticks(fontsize=16)
-#pylab.yticks(fontsize=16)
-#plt.show()
+"""
+plt.plot(t, r)
+plt.title('Mercury distance from sun', fontsize = 22)
+plt.xlabel('Time [year]', fontsize = 22)
+plt.ylabel('Distance [AU]', fontsize = 22)# change to v_tilde(x)
+pylab.xticks(fontsize=16)
+pylab.yticks(fontsize=16)
+plt.show()
+"""
 
-#plt.plot(t_r_min, theta, 'b')
-plt.title('Perihelion angle theta$_p$ with linear regression', fontsize = 22)
-
-plt.xlabel('Time [s]', fontsize = 22)
-#plt.axis([-1.5, 1.5, -1.5, 1.5])
-#plt.axis('equal')
-
-plt.ylabel('Theta$_p$ [rad]', fontsize = 22)# change to v_tilde(x)
+plt.title('Perihelion angle theta_p \n without relativistic correction', fontsize = 22)
+plt.xlabel('Time [year]', fontsize = 22)
+plt.ylabel('Theta$_p$ [rad]', fontsize = 22)
 pylab.xticks(fontsize=16)
 pylab.yticks(fontsize=16)
 

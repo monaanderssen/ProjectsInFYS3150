@@ -36,9 +36,6 @@ public:
     // functions
     void add(planet newplanet);
     void addM(planet newplanet);
-    void GravitationalConstant();
-    void print_position(std::ofstream &output, int dimension, double time, int number);
-    void print_energy(std::ofstream &output, double time, double epsilon);
     void VelocityVerlet(int dimension, int integration_points, double final_time, double epsilon);//(int dimension, int integrationPoints, int finalTime, double epsilon);//
     void VelocityVerletMercury(int dimension, int integration_points, double final_time, double epsilon, planet &Sun, planet &Mercury);
     double **setup_matrix(int height, int width);

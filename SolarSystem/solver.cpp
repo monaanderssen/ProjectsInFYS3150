@@ -42,53 +42,19 @@ void solver::addM(planet newplanet)
     all_planets.push_back(newplanet);
 }
 
-void solver::GravitationalConstant()
-{
-    //G = (4*M_PI*M_PI/32)*radius*radius*radius/total_mass;
-    G = 4*M_PI*M_PI; //(AU)³/(solarMass*yr²)
-}
-
-void solver::print_position(std::ofstream &output, int dimension, double time,int number)
-{   // Writes mass, position and velocity to a file "output"
-    if(dimension > 3 || dimension <= 0) dimension = 3;
-    else{
-        for(int i=0;i<number;i++){
-            planet &current = all_planets[i];
-            output << time << "\t" << i+1 << "\t" << current.mass;
-            for(int j=0;j<dimension;j++) output << "\t" << current.position[j];
-            for(int j=0;j<dimension;j++) output << "\t" << current.velocity[j];
-            output << std::endl;
-        }
-    }
-}
-
-void solver::print_energy(std::ofstream &output, double time,double epsilon)
-{   // Writes energies to a file "output"
-
-    this->KineticEnergySystem();
-    this->PotentialEnergySystem(epsilon);
-    for(int nr=0;nr<total_planets;nr++){
-        planet &Current = all_planets[nr];
-        output << time << "\t" << nr << "\t";
-        output << Current.kinetic << "\t" << Current.potential << std::endl;
-    }
-}
-
 void::solver::Euler(int dimension, int integrationPoints, int finalTime, double epsilon)
 { /*Euler method to solve two coupled ODEs.*/
 
     // Define time step
     double timeStep = finalTime/(double)integrationPoints;
     double time = 0.0;
-    double loss = 0.; // Possible energy loss
     double gravitationalConstant = 39.4784; // (AU)³/solarMass*yr²
 
     // Set up arrays
     double **acceleration = setup_matrix(total_planets,3);
-    double **acceleration_new = setup_matrix(total_planets,3);
 
     // Initialize forces
-    double Fx,Fy,Fz,Fxnew,Fynew,Fznew; // Forces in each dimension
+    double Fx,Fy,Fz; // Forces in each dimension
     int n = 0; //number of iterations
 
     if(doFileWriting == true){
@@ -102,7 +68,7 @@ void::solver::Euler(int dimension, int integrationPoints, int finalTime, double 
         for(int nr1=0; nr1<total_planets; nr1++){
             planet &current = all_planets[nr1]; // Current planet we are looking at
 
-            Fx = Fy = Fz = Fxnew = Fynew = Fznew = 0.0; // Reset forces before each run
+            Fx = Fy = Fz = 0.0; // Reset forces before each run
 
             // Calculate forces in each dimension
             for(int nr2=0; nr2<total_planets; nr2++){
@@ -129,6 +95,7 @@ void::solver::Euler(int dimension, int integrationPoints, int finalTime, double 
                 current.velocity[j] = new_velocity;
             }
 
+            //The sun's position in the origin
             double sunPosition_x;
             double sunPosition_y;
             double sunPosition_z;
@@ -138,11 +105,11 @@ void::solver::Euler(int dimension, int integrationPoints, int finalTime, double 
                sunPosition_z = current.position[2];
             }
 
-
             current.position[0] -= sunPosition_x;
             current.position[1] -= sunPosition_y;
             current.position[2] -= sunPosition_z;
 
+            //Calculate the energies
             double kineticEnergy = current.KineticEnergy();
             double potentialEnergy = 0;
             double angularMomentum = 0;
@@ -168,11 +135,7 @@ void::solver::Euler(int dimension, int integrationPoints, int finalTime, double 
 }
 
 void solver::VelocityVerlet(int dimension, int integrationPoints, double final_time, double epsilon)
-{   /*  Velocity-Verlet solver for two coupeled ODEs in a given number of dimensions.
-    The algorithm is, exemplified in 1D for position x(t), velocity v(t) and acceleration a(t):
-    x(t+dt) = x(t) + v(t)*dt + 0.5*dt*dt*a(t);
-    v(t+dt) = v(t) + 0.5*dt*[a(t) + a(t+dt)];*/
-
+{
     // Define time step
     double timeStep = final_time/((double) integrationPoints);
     double time = 0.0;
@@ -230,6 +193,7 @@ void solver::VelocityVerlet(int dimension, int integrationPoints, double final_t
                 current.position[j] += current.velocity[j]*timeStep + t_temp1*acceleration[nr1][j];
             }
 
+            //The sun's position in the origin
 //            double sunPosition_x;
 //            double sunPosition_y;
 //            double sunPosition_z;
@@ -330,7 +294,7 @@ void solver::VelocityVerletMercury(int dimension, int integrationPoints, double 
 //    vec acceleration_new(3);
 
     // Initialize forces
-    double Fx,Fy,Fz,Fxnew,Fynew,Fznew; // Forces in each dimension
+    double Fx,Fy,Fz; // Forces in each dimension
 
     int n = 0;
     n+=1;
@@ -502,16 +466,12 @@ void solver::PotentialEnergySystem(double epsilon)
 }
 
 void::solver::writeInformationToFile(string type, int integrationPoints, int dim){
-    string planetPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetPosition") + type + "Results.txt";
+    string planetPositionPath= string("/Users/monaanderssen/Documents/FYS3150/ProjectsInFYS3150/PlanetPosition") + type + "Results.txt";
     ofstream myPlanetPositionFile;
     myPlanetPositionFile.open(planetPositionPath,std::ios::app);
 
-    string planetEnergiesPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetEnergies") + type + "Results.txt";
+    string planetEnergiesPath= string("/Users/monaanderssen/Documents/FYS3150/ProjectsInFYS3150/PlanetEnergies") + type + "Results.txt";
     ofstream myPlanetEnergiesFile(planetEnergiesPath);
-
-//    string mercuryPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/MercuryPositionResults.txt");
-//    ofstream myMercuryPositionFile;
-//    myMercuryPositionFile.open(mercuryPositionPath,std::ios::app);
 
     myPlanetPositionFile << integrationPoints << endl;
     myPlanetPositionFile << dim << endl;
@@ -521,21 +481,16 @@ void::solver::writeInformationToFile(string type, int integrationPoints, int dim
     myPlanetEnergiesFile << dim << endl;
     myPlanetEnergiesFile << total_planets << endl;
 
-//    myMercuryPositionFile << integrationPoints << endl;
-//    myMercuryPositionFile << dim << endl;
-
-
     myPlanetPositionFile.close();
     myPlanetEnergiesFile.close();
-//    myMercuryPositionFile.close();
 }
 
 void solver::writeToFile(string type, planet& current, double time, int integrationPoints, double kineticEnergy, double potentialEnergy, double angularMomentum) {
-    string planetPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetPosition") + type + "Results.txt";
+    string planetPositionPath= string("/Users/monaanderssen/Documents/FYS3150/ProjectsInFYS3150/PlanetPosition") + type + "Results.txt";
     ofstream myPlanetPositionFile;
     myPlanetPositionFile.open(planetPositionPath,std::ios::app);
 
-    string planetEnergiesPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/PlanetEnergies") + type + "Results.txt";
+    string planetEnergiesPath= string("/Users/monaanderssen/Documents/FYS3150/ProjectsInFYS3150/PlanetEnergies") + type + "Results.txt";
     ofstream myPlanetEnergiesFile;
     myPlanetEnergiesFile.open(planetEnergiesPath,std::ios::app);
 
@@ -548,15 +503,11 @@ void solver::writeToFile(string type, planet& current, double time, int integrat
 
 void solver::writeMercuryToFile(double mercuryDistance, planet &Sun, planet &Mercury, double time, int integrationPoints) {
 
-    string mercuryPositionPath= string("/uio/hume/student-u85/monande/FYS3150/ProjectsInFYS3150/MercuryPositionResults.txt");
+    string mercuryPositionPath= string("/Users/monaanderssen/Documents/FYS3150/ProjectsInFYS3150/MercuryPositionResults.txt");
 
     if (! myMercuryPositionFile.is_open()) {
         myMercuryPositionFile.open(mercuryPositionPath);
     }
 
-
     myMercuryPositionFile << setprecision(16) << time << " " << mercuryDistance << " "  << Mercury.position[0] << " " << Mercury.position[1] << " " << Mercury.position[2] << endl;
-// << Sun.position[0] << " " << Sun.position[1] << " " << Sun.position[2] << " "
-
-    //myMercuryPositionFile.close();
 }
